@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"runtime"
 	"time"
 
 	"go.opentelemetry.io/otel/codes"
@@ -80,6 +81,8 @@ func Main(ctx context.Context) error {
 				trace.WithAttributes(
 					semconv.CodeNamespaceKey.String(event.Package),
 					semconv.CodeFunctionKey.String(event.Test),
+					semconv.HostArchKey.String(runtime.GOARCH),
+					semconv.OSNameKey.String(runtime.GOOS),
 				),
 			)
 			spans[event.Test] = &spanDetails{
